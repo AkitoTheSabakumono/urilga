@@ -1,114 +1,347 @@
-
+<!DOCTYPE html>
 <html lang="mn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Урилга - Төрийн дээд шагнал</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet" />
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 100%;
+      background: radial-gradient(circle at center, #1a1a1a 0%, #000 90%);
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to bottom right, #1f2c4c, #0e1a2b);
       color: #fff;
     }
+
+    canvas#auraCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      background: transparent;
+    }
+
     .container {
-      max-width: 700px;
-      margin: 60px auto;
-      background: #fff;
-      color: #2c3e50;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-      padding: 40px 30px;
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+      margin: 80px auto 100px auto;
+      background: 
+        url('https://www.transparenttextures.com/patterns/gold-fish-scale.png') repeat,
+        rgba(10, 10, 10, 0.85);
+      background-blend-mode: overlay;
+      color: #eee;
+      border: 3px solid #FFD700;
+      border-image: linear-gradient(45deg, #FFD700 0%, #FFA500 100%);
+      border-image-slice: 1;
+      border-radius: 20px;
+      padding: 48px 40px 60px 40px;
+      box-shadow:
+        0 0 60px 10px rgba(255, 215, 0, 0.3),
+        inset 0 0 60px 12px rgba(255, 215, 0, 0.12);
+      backdrop-filter: blur(4px);
       text-align: center;
-      background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');
+      animation: fadeIn 2s ease-out;
+      user-select: none;
     }
-    h1 {
+
+    h1#mainTitle {
       font-family: 'Playfair Display', serif;
-      font-size: 40px;
+      font-size: 56px;
+      letter-spacing: 0.12em;
+      color: #FFD700;
       margin-bottom: 10px;
-      color: #b68b00;
+      position: relative;
+      z-index: 10;
+      text-shadow:
+        0 0 15px #FFD700,
+        0 0 30px #FFA500,
+        0 0 40px #FFD700,
+        0 0 60px #FFB800;
+      animation: glowText 3s infinite ease-in-out;
+      user-select: text;
     }
-    .subtitle {
-      font-size: 22px;
-      font-weight: bold;
-      color: #34495e;
-    }
-    p {
-      font-size: 18px;
-      line-height: 1.7;
-      margin: 15px 0;
-    }
-    .medal {
-      display: inline-block;
+
+    .ceremony-description {
+      font-family: 'Cormorant Garamond', serif;
       font-size: 20px;
-      color: #d35400;
-      font-weight: bold;
-      margin-top: 10px;
+      line-height: 1.9;
+      color: #eee;
+      opacity: 0;
+      animation: fadeInUp 1.5s ease forwards 2.5s;
+      text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+      user-select: text;
     }
+
+    .ceremony-description span {
+      color: #FFD700;
+      font-weight: 700;
+    }
+
+    .gold-line {
+      height: 5px;
+      background: linear-gradient(90deg, #000, #FFD700 50%, #000);
+      border-radius: 4px;
+      margin: 36px 0;
+      box-shadow: 0 0 20px #FFD700;
+      opacity: 0;
+      animation: fadeInUp 1.5s ease forwards 3.5s;
+      user-select: none;
+    }
+
     .info {
-      margin-top: 30px;
-      background: #f6f6f6;
-      padding: 20px;
-      border-radius: 12px;
-      border: 2px solid #b68b00;
+      margin-top: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 28px 30px;
+      border-radius: 14px;
+      border: 2px solid #FFD700;
+      box-shadow: 0 0 30px 2px rgba(255, 215, 0, 0.4);
+      opacity: 0;
+      animation: fadeInUp 1.5s ease forwards 4s;
+      user-select: text;
     }
+
+    .info p {
+      margin: 14px 0;
+      font-size: 18px;
+      color: #ddd;
+    }
+
     .highlight {
-      color: #b68b00;
-      font-weight: bold;
+      color: #FFD700;
+      font-weight: 700;
     }
+
     .map-link {
       display: inline-block;
-      margin-top: 25px;
-      padding: 14px 28px;
-      background-color: #b68b00;
-      color: white;
+      margin-top: 26px;
+      padding: 14px 32px;
+      background-color: #FFD700;
+      color: black;
       text-decoration: none;
-      font-size: 16px;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
+      font-size: 18px;
+      border-radius: 12px;
+      font-weight: 800;
+      box-shadow: 0 0 20px #FFD700;
+      animation: pulse 2.5s infinite ease-in-out;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      user-select: none;
     }
+
     .map-link:hover {
-      background-color: #a07800;
+      background-color: #e0c100;
+      transform: scale(1.1);
+      box-shadow: 0 0 35px #ffcc00;
     }
+
     .footer {
-      margin-top: 40px;
+      margin-top: 48px;
       font-style: italic;
-      font-size: 17px;
-      color: #444;
+      font-size: 19px;
+      color: #bbb;
+      opacity: 0;
+      animation: fadeInUp 1.5s ease forwards 5s;
+      user-select: text;
+      line-height: 1.6;
     }
-    .gold-line {
-      height: 4px;
-      background: linear-gradient(to right, #fff, #b68b00, #fff);
-      margin: 30px 0;
-      border-radius: 2px;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 15px #FFD700, 0 0 30px #FFA500; }
+      50% { text-shadow: 0 0 40px #FFD700, 0 0 60px #FFB800; }
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px #FFD700; }
+      50% { box-shadow: 0 0 40px #FFAA00; }
+    }
+
+    @keyframes lightPulse {
+      0%, 100% { opacity: 0.18; }
+      50% { opacity: 0.28; }
+    }
+
+    @keyframes glowImage {
+      0%, 100% {
+        filter: drop-shadow(0 0 12px #FFD700) drop-shadow(0 0 24px #FFA500);
+      }
+      50% {
+        filter: drop-shadow(0 0 24px #FFD700) drop-shadow(0 0 40px #FFB800);
+      }
+    }
+
+    @keyframes pulseImage {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎖 Урилга 🎖</h1>
-    <div class="subtitle">Бидний хайртай <strong>Содмин Шагдар</strong></div>
-    <p class="medal">“Монгол Улсын гавьяат тээвэрчин” цол хүртсэнийг тохиолдуулан<br> хүндэтгэлийн арга хэмжээнд таныг урьж байна.</p>
 
-    <div class="gold-line"></div>
+  <canvas id="auraCanvas"></canvas>
 
-    <div class="info">
-      <p>📅 <span class="highlight">Хэзээ:</span> 2025 оны 8-р сарын 15</p>
-      <p>🕔 <span class="highlight">Цаг:</span> 17:00 (Оройн 5)</p>
-      <p>📍 <span class="highlight">Хаана:</span> Төв аймаг, Зуунмод хот</p>
-      <a class="map-link" href="https://maps.app.goo.gl/eNZ1jYtYs7TRCXbE6" target="_blank">
-        📍 Байршлыг харах (Google Maps)
-      </a>
+  <svg id="lightRays" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
+    style="position: absolute; top: 120px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; pointer-events: none; z-index: 1; filter: blur(10px); opacity: 0.18; animation: lightPulse 4s ease-in-out infinite;">
+    <defs>
+      <radialGradient id="rayGradient" cx="50%" cy="100%" r="80%">
+        <stop offset="0%" stop-color="#FFD700" stop-opacity="0.7" />
+        <stop offset="100%" stop-color="#FFD700" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <rect width="500" height="200" fill="url(#rayGradient)" />
+  </svg>
+
+  <div class="container" role="main" aria-label="Invitation to Honor Ceremony">
+
+    <!-- Medal image above title -->
+    <img 
+      src="assets/medal.png" 
+      alt="Төрийн дээд шагналын медаль"
+      aria-label="Төрийн дээд шагналын медаль"
+      style="
+        display: block;
+        margin: 0 auto 30px auto;
+        width: 120px;
+        height: auto;
+        filter: drop-shadow(0 0 12px #FFD700) drop-shadow(0 0 24px #FFA500);
+        animation: glowImage 3s ease-in-out infinite, pulseImage 4s ease-in-out infinite, fadeInUp 1.5s ease forwards 2s;
+        opacity: 0;"
+    />
+
+    <h1 id="mainTitle">Урилга</h1>
+
+    <div class="ceremony-description">
+      Монгол улсын ерөнхийлөгчийн зарлигаар
+      <span>“Монгол Улсын гавьяат тээвэрчин”</span>
+      цолыг хүртсэн эрхэм хүндэт
+      <span style="color: #fff; font-weight: 700;">Содномын Шагдар</span>-ийн хөдөлмөр, амьдралын гавьяаг хүндэтгэн,
+      түүний нэр төрийг албан ёсоор тунхаглах хүндэтгэлийн арга хэмжээнд таныг урьж байна.
     </div>
 
     <div class="gold-line"></div>
 
+    <div class="info" aria-label="Event details">
+      <p>📅 <span class="highlight">Хэзээ:</span> 2025 оны 8-р сарын 15</p>
+      <p>🕔 <span class="highlight">Цаг:</span> 17:00 (Оройн 5)</p>
+      <p>📍 <span class="highlight">Хаана:</span> Төв аймаг, Зуунмод хот</p>
+      <p>📞 <span class="highlight">Холбогдох утас:</span> 88171791</p>
+      <a class="map-link" href="https://maps.app.goo.gl/eNZ1jYtYs7TRCXbE6" target="_blank" rel="noopener noreferrer">📍 Байршлыг харах</a>
+    </div>
+
     <p class="footer">
-      Шагдар болон түүний гэр бүл, найз нөхөд нь<br>
+      Шагдар болон түүний гэр бүл, найз нөхөд нь<br />
       танд гүнээ хүндэтгэлтэйгээр урилга хүргэж байна.
     </p>
   </div>
+
+  <script>
+    const canvas = document.getElementById('auraCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+
+    function resize() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W;
+      canvas.height = H;
+    }
+    resize();
+
+    window.addEventListener('resize', resize);
+
+    const colors = ['#FFD700', '#FFEC8B', '#FFF8DC'];
+    const sparkleColor = '#FFFACD';
+    const particles = [];
+
+    function createParticle() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 1.2,
+        vy: (Math.random() - 0.5) * 1.2,
+        size: Math.random() * 2 + 0.7,
+        life: 0,
+        maxLife: 300 + Math.random() * 120,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        sparkle: Math.random() < 0.02,
+        sparkleLife: 0,
+        sparkleDuration: 50 + Math.random() * 50
+      };
+    }
+
+    for (let i = 0; i < 200; i++) {
+      particles.push(createParticle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+
+      const title = document.getElementById("mainTitle");
+      const rect = title.getBoundingClientRect();
+      const target = {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      };
+
+      particles.forEach(p => {
+        ctx.beginPath();
+        const radius = p.sparkle ? p.size * 1.5 : p.size;
+        ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+
+        if (p.sparkle && p.sparkleLife < p.sparkleDuration) {
+          const alpha = 1 - p.sparkleLife / p.sparkleDuration;
+          ctx.fillStyle = `rgba(255, 250, 205, ${alpha})`;
+          ctx.shadowColor = `rgba(255, 250, 205, ${alpha})`;
+          ctx.shadowBlur = 20;
+          p.sparkleLife++;
+        } else {
+          ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 10;
+          if (p.sparkle) {
+            p.sparkle = false;
+          } else if (Math.random() < 0.005) {
+            p.sparkle = true;
+            p.sparkleLife = 0;
+          }
+        }
+
+        ctx.fill();
+
+        const dx = target.x - p.x;
+        const dy = target.y - p.y;
+        p.vx += dx * 0.00015;
+        p.vy += dy * 0.00015;
+
+        p.vx *= 0.98;
+        p.vy *= 0.98;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        p.life++;
+        if (p.life > p.maxLife || p.x < -50 || p.x > W + 50 || p.y < -50 || p.y > H + 50) {
+          Object.assign(p, createParticle());
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 </body>
 </html>
