@@ -227,8 +227,7 @@
     .emoji {
   font-size: 0.9em;
   vertical-align: middle;
-}
-    .medal-wrapper {
+}.medal-wrapper {
   position: relative;
   width: 200px;
   height: 180px;
@@ -244,17 +243,18 @@
     50% 0%, 93% 25%, 93% 75%, 
     50% 100%, 7% 75%, 7% 25%
   );
-  border: 2px solid gold;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  border: 1.5px solid #FFD700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.25);
+  transition: transform 0.3s ease;
 }
 
 .layer1 {
-  background: linear-gradient(135deg, #36013f, #6a0572);
+  background: linear-gradient(135deg, #1a1a1a, #333);
   z-index: 1;
 }
 
 .layer2 {
-  background: linear-gradient(135deg, #2a0033, #5a006d);
+  background: linear-gradient(135deg, #2a2a2a, #444);
   transform: scale(0.85);
   top: 10px;
   left: 10px;
@@ -262,7 +262,7 @@
 }
 
 .layer3 {
-  background: linear-gradient(135deg, #180020, #420052);
+  background: linear-gradient(135deg, #FFD700, #FFB800);
   transform: scale(0.7);
   top: 20px;
   left: 20px;
