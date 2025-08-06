@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Урилга - Төрийн дээд шагнал</title>
+  <title>Урилга</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet" />
   <style>
+    /* Reset and base */
     html, body {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      min-height: 100%;
-      background: radial-gradient(circle at center, #1a1a1a 0%, #000 90%);
-      font-family: 'Roboto', sans-serif;
-      color: #fff;
-    }
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* block sideways scroll */
+  overflow-y: auto;   /* allow vertical scroll */
+  min-height: 100%;
+  background: radial-gradient(circle at center, #1a1a1a 0%, #000 90%);
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+}
 
+    /* Background aura canvas */
     canvas#auraCanvas {
       position: fixed;
       top: 0; left: 0;
@@ -25,15 +27,41 @@
       z-index: 0;
       background: transparent;
     }
+   
+    .play-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #FFD700;
+  color: #000;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  box-shadow: 0 0 15px #FFD700;
+  cursor: pointer;
+  z-index: 999;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+  animation: pulse 2.5s infinite ease-in-out;
+}
 
+.play-button:hover {
+  background-color: #e0c100;
+  transform: scale(1.05);
+}
+
+  
+
+    /* Container with luxurious border and subtle marble texture */
     .container {
       position: relative;
       z-index: 2;
-      max-width: 600px;
+      max-width: 600px; /* reduced width */
       margin: 80px auto 100px auto;
       background: 
         url('https://www.transparenttextures.com/patterns/gold-fish-scale.png') repeat,
-        rgba(10, 10, 10, 0.85);
+        rgba(10, 10, 10, 0.85); /* slightly more transparent */
       background-blend-mode: overlay;
       color: #eee;
       border: 3px solid #FFD700;
@@ -42,14 +70,15 @@
       border-radius: 20px;
       padding: 48px 40px 60px 40px;
       box-shadow:
-        0 0 60px 10px rgba(255, 215, 0, 0.3),
-        inset 0 0 60px 12px rgba(255, 215, 0, 0.12);
-      backdrop-filter: blur(4px);
+        0 0 40px 8px rgba(255, 215, 0, 0.6),
+        inset 0 0 60px 12px rgba(255, 215, 0, 0.15);
+      backdrop-filter: blur(4px); /* reduced blur */
       text-align: center;
       animation: fadeIn 2s ease-out;
       user-select: none;
     }
 
+    /* Title */
     h1#mainTitle {
       font-family: 'Playfair Display', serif;
       font-size: 56px;
@@ -67,6 +96,7 @@
       user-select: text;
     }
 
+    /* Ceremony description */
     .ceremony-description {
       font-family: 'Cormorant Garamond', serif;
       font-size: 20px;
@@ -83,6 +113,7 @@
       font-weight: 700;
     }
 
+    /* Gold horizontal line */
     .gold-line {
       height: 5px;
       background: linear-gradient(90deg, #000, #FFD700 50%, #000);
@@ -94,6 +125,7 @@
       user-select: none;
     }
 
+    /* Info box */
     .info {
       margin-top: 10px;
       background: rgba(255, 255, 255, 0.06);
@@ -117,6 +149,7 @@
       font-weight: 700;
     }
 
+    /* Map link styled as luxurious button */
     .map-link {
       display: inline-block;
       margin-top: 26px;
@@ -139,6 +172,7 @@
       box-shadow: 0 0 35px #ffcc00;
     }
 
+    /* Footer text */
     .footer {
       margin-top: 48px;
       font-style: italic;
@@ -150,6 +184,7 @@
       line-height: 1.6;
     }
 
+    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(40px); }
       to { opacity: 1; transform: translateY(0); }
@@ -170,32 +205,103 @@
       50% { box-shadow: 0 0 40px #FFAA00; }
     }
 
+    /* Light rays behind title */
+    #lightRays {
+      position: absolute;
+      top: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 500px;
+      height: 200px;
+      pointer-events: none;
+      z-index: 1;
+      filter: blur(10px);
+      opacity: 0.18;
+      animation: lightPulse 4s ease-in-out infinite;
+    }
+
     @keyframes lightPulse {
       0%, 100% { opacity: 0.18; }
       50% { opacity: 0.28; }
     }
+    .emoji {
+  font-size: 0.9em;
+  vertical-align: middle;
+}
+    .medal-wrapper {
+  position: relative;
+  width: 200px;
+  height: 180px;
+  margin: 0 auto 30px auto;
+  z-index: 3;
+}
 
-    @keyframes glowImage {
-      0%, 100% {
-        filter: drop-shadow(0 0 12px #FFD700) drop-shadow(0 0 24px #FFA500);
-      }
-      50% {
-        filter: drop-shadow(0 0 24px #FFD700) drop-shadow(0 0 40px #FFB800);
-      }
-    }
+.hex-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(
+    50% 0%, 93% 25%, 93% 75%, 
+    50% 100%, 7% 75%, 7% 25%
+  );
+  border: 2px solid gold;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
 
-    @keyframes pulseImage {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
+.layer1 {
+  background: linear-gradient(135deg, #36013f, #6a0572);
+  z-index: 1;
+}
+
+.layer2 {
+  background: linear-gradient(135deg, #2a0033, #5a006d);
+  transform: scale(0.85);
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+.layer3 {
+  background: linear-gradient(135deg, #180020, #420052);
+  transform: scale(0.7);
+  top: 20px;
+  left: 20px;
+  z-index: 3;
+}
+
+.medal-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 12px #FFD700) drop-shadow(0 0 24px #FFA500);
+  z-index: 4;
+  animation: glowImage 3s ease-in-out infinite;
+}
+
+   
+
+
   </style>
 </head>
 <body>
+  <button id="playBtn" class="play-button">🎵 Хөгжим</button>
+  <audio id="bg-music" loop>
+  <source src="music.mp3" type="audio/mpeg" />
+  Таны хөтөч хөгжим тоглуулахгүй байж магадгүй.
+</audio>
 
+
+
+
+
+  <!-- Aura Canvas -->
   <canvas id="auraCanvas"></canvas>
 
-  <svg id="lightRays" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"
-    style="position: absolute; top: 120px; left: 50%; transform: translateX(-50%); width: 500px; height: 200px; pointer-events: none; z-index: 1; filter: blur(10px); opacity: 0.18; animation: lightPulse 4s ease-in-out infinite;">
+  <!-- Soft light rays behind title -->
+  <svg id="lightRays" viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <defs>
       <radialGradient id="rayGradient" cx="50%" cy="100%" r="80%">
         <stop offset="0%" stop-color="#FFD700" stop-opacity="0.7" />
@@ -206,49 +312,50 @@
   </svg>
 
   <div class="container" role="main" aria-label="Invitation to Honor Ceremony">
-
     <!-- Medal image above title -->
-    <img 
-      src="medal-removebg-preview.png" 
-      alt="Төрийн дээд шагналын медаль"
-      aria-label="Төрийн дээд шагналын медаль"
-      style="
-        display: block;
-        margin: 0 auto 30px auto;
-        width: 120px;
-        height: auto;
-        filter: drop-shadow(0 0 12px #FFD700) drop-shadow(0 0 24px #FFA500);
-        animation: glowImage 3s ease-in-out infinite, pulseImage 4s ease-in-out infinite, fadeInUp 1.5s ease forwards 2s;
-        opacity: 0;"
-    />
+<!-- Glowing medal image above title -->
+<!-- Hexagon background with medal -->
+<div class="medal-wrapper">
+  <div class="hex-layer layer1"></div>
+  <div class="hex-layer layer2"></div>
+  <div class="hex-layer layer3"></div>
+  <img 
+    src="medal-removebg-preview.png" 
+    alt="Medal" 
+    class="medal-image"
+  />
+</div>
 
-    <h1 id="mainTitle">Урилга</h1>
+
+<h1 id="mainTitle">Урилга</h1>
+
+
+
 
     <div class="ceremony-description">
-      Монгол улсын ерөнхийлөгчийн зарлигаар
-      <span>“Монгол Улсын гавьяат тээвэрчин”</span>
-      цолыг хүртсэн эрхэм хүндэт
-      <span style="color: #fff; font-weight: 700;">Содномын Шагдар</span>-ийн хөдөлмөр, амьдралын гавьяаг хүндэтгэн,
-      түүний нэр төрийг албан ёсоор тунхаглах хүндэтгэлийн арга хэмжээнд таныг урьж байна.
+      <span style="color: #fff; font-weight: 700;">Эрхэм хүндэд таныг</span><br>
+      
+      Төрийн дээд шагнал  <span>Монгол улсын гавъяат тээвэрчин</span> цол тэмдгээр шагнагдсан С. Шагдарын хүндэтгэлийн цайллаганд хүрэлцэн ирэхийг урьж байна.
     </div>
 
     <div class="gold-line"></div>
 
     <div class="info" aria-label="Event details">
       <p>📅 <span class="highlight">Хэзээ:</span> 2025 оны 8-р сарын 15</p>
-      <p>🕔 <span class="highlight">Цаг:</span> 17:00 (Оройн 5)</p>
-      <p>📍 <span class="highlight">Хаана:</span> Төв аймаг, Зуунмод хот</p>
+      <p>🕔 <span class="highlight">Цаг:</span> 11:00</p>
+      <p>📍 <span class="highlight">Хаана:</span> Зуун-мод өв соёлын өргөө хот</p>
       <p>📞 <span class="highlight">Холбогдох утас:</span> 88171791</p>
       <a class="map-link" href="https://maps.app.goo.gl/eNZ1jYtYs7TRCXbE6" target="_blank" rel="noopener noreferrer">📍 Байршлыг харах</a>
     </div>
 
     <p class="footer">
-      Шагдар болон түүний гэр бүл, найз нөхөд нь<br />
+      С. Шагдар болон түүний гэр бүл<br />
       танд гүнээ хүндэтгэлтэйгээр урилга хүргэж байна.
     </p>
   </div>
 
   <script>
+    // Aura particle animation enhanced with sparkle effect
     const canvas = document.getElementById('auraCanvas');
     const ctx = canvas.getContext('2d');
     let W, H;
@@ -277,7 +384,7 @@
         life: 0,
         maxLife: 300 + Math.random() * 120,
         color: colors[Math.floor(Math.random() * colors.length)],
-        sparkle: Math.random() < 0.02,
+        sparkle: Math.random() < 0.02,  // 2% chance sparkle
         sparkleLife: 0,
         sparkleDuration: 50 + Math.random() * 50
       };
@@ -302,6 +409,7 @@
         const radius = p.sparkle ? p.size * 1.5 : p.size;
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
 
+        // Sparkle flicker
         if (p.sparkle && p.sparkleLife < p.sparkleDuration) {
           const alpha = 1 - p.sparkleLife / p.sparkleDuration;
           ctx.fillStyle = `rgba(255, 250, 205, ${alpha})`;
@@ -313,7 +421,7 @@
           ctx.shadowColor = p.color;
           ctx.shadowBlur = 10;
           if (p.sparkle) {
-            p.sparkle = false;
+            p.sparkle = false; // sparkle ended
           } else if (Math.random() < 0.005) {
             p.sparkle = true;
             p.sparkleLife = 0;
@@ -322,11 +430,13 @@
 
         ctx.fill();
 
+        // Particle moves toward title gently
         const dx = target.x - p.x;
         const dy = target.y - p.y;
         p.vx += dx * 0.00015;
         p.vy += dy * 0.00015;
 
+        // Add slight friction
         p.vx *= 0.98;
         p.vy *= 0.98;
 
@@ -343,5 +453,22 @@
     }
     animate();
   </script>
+ <script>
+  const audio = document.getElementById('bg-music');
+  const playBtn = document.getElementById('playBtn');
+
+  playBtn.addEventListener('click', () => {
+    audio.play().then(() => {
+      playBtn.style.display = 'none'; // hide button after playing
+    }).catch(err => {
+      console.error('Audio play error:', err);
+      alert('Төхөөрөмж таныг хөгжим тоглуулахыг зөвшөөрсөнгүй.');
+    });
+  });
+</script>
+
+
+
+
 </body>
 </html>
